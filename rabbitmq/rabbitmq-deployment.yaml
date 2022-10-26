@@ -1,0 +1,54 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "rabbitmq"
+  namespace: "microservices"
+  labels:
+    app: "rabbitmq"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "rabbitmq"
+  template:
+    metadata:
+      labels:
+        app: "rabbitmq"
+    spec:
+      containers:
+      - name: "rabbitmq-1"
+        image: "rabbitmq:3.8.9-management"
+        env:
+        - name: "RABBITMQ_DEFAULT_USER"
+          valueFrom:
+            configMapKeyRef:
+              key: "RABBITMQ_DEFAULT_USER"
+              name: "rabbitmq-config"
+        - name: "RABBITMQ_DEFAULT_PASS"
+          valueFrom:
+            configMapKeyRef:
+              key: "RABBITMQ_DEFAULT_PASS"
+              name: "rabbitmq-config"
+---
+apiVersion: "autoscaling/v2"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "rabbitmq-hpa-ojfl"
+  namespace: "microservices"
+  labels:
+    app: "rabbitmq"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "rabbitmq"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      target:
+        type: "Utilization"
+        averageUtilization: 80

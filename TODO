@@ -1,0 +1,4 @@
+images
+    us.gcr.io/learn-cloud-0809/rest_service:latest
+    us.gcr.io/learn-cloud-0809/consumer_service:latest
+    us.gcr.io/learn-cloud-0809/logger_service:latest

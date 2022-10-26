@@ -1,0 +1,12 @@
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "consumer-service-config"
+  namespace: "microservices"
+  labels:
+    app: "consumer-service"
+data:
+  SERVICE_NAME: "consumer-service"
+  RABBIT_MQ_URL: "amqp://guest:guest@rabbitmq-service:5672/"
+  EXCHANGE_NAME: "v1.phone"
+  REST_SERVICE_URL: "http://rest-service:80"

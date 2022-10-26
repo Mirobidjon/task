@@ -1,0 +1,11 @@
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "logger-service-config"
+  namespace: "microservices"
+  labels:
+    app: "logger-service"
+data:
+  SERVICE_NAME: "logger-service"
+  RABBIT_MQ_URL: "amqp://guest:guest@rabbitmq-service:5672/"
+  EXCHANGE_NAME: "v1.phone"

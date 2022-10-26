@@ -1,0 +1,88 @@
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "rest-service"
+  namespace: "microservices"
+  labels:
+    app: "rest-service"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "rest-service"
+  template:
+    metadata:
+      labels:
+        app: "rest-service"
+    spec:
+      containers:
+      - name: "rest-service-1"
+        image: "us.gcr.io/learn-cloud-0809/rest_service:latest"
+        env:
+        - name: "SERVICE_NAME"
+          valueFrom:
+            configMapKeyRef:
+              key: "SERVICE_NAME"
+              name: "rest-service-config"
+        - name: "HTTP_PORT"
+          valueFrom:
+            configMapKeyRef:
+              key: "HTTP_PORT"
+              name: "rest-service-config"
+        - name: "ENVIRONMENT"
+          valueFrom:
+            configMapKeyRef:
+              key: "ENVIRONMENT"
+              name: "rest-service-config"
+        - name: "POSTGRES_HOST"
+          valueFrom:
+            configMapKeyRef:
+              key: "POSTGRES_HOST"
+              name: "rest-service-config"
+        - name: "POSTGRES_PORT"
+          valueFrom:
+            configMapKeyRef:
+              key: "POSTGRES_PORT"
+              name: "rest-service-config"
+        - name: "POSTGRES_USER"
+          valueFrom:
+            configMapKeyRef:
+              key: "POSTGRES_USER"
+              name: "rest-service-config"
+        - name: "POSTGRES_PASSWORD"
+          valueFrom:
+            configMapKeyRef:
+              key: "POSTGRES_PASSWORD"
+              name: "rest-service-config"
+        - name: "POSTGRES_DATABASE"
+          valueFrom:
+            configMapKeyRef:
+              key: "POSTGRES_DATABASE"
+              name: "rest-service-config"
+        - name: "POSTGRES_MAX_CONNECTIONS"
+          valueFrom:
+            configMapKeyRef:
+              key: "POSTGRES_MAX_CONNECTIONS"
+              name: "rest-service-config"
+---
+apiVersion: "autoscaling/v2"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "rest-service-hpa-geg2"
+  namespace: "microservices"
+  labels:
+    app: "rest-service"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "rest-service"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      target:
+        type: "Utilization"
+        averageUtilization: 80

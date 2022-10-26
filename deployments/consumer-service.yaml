@@ -1,0 +1,63 @@
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "consumer-service"
+  namespace: "microservices"
+  labels:
+    app: "consumer-service"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "consumer-service"
+  template:
+    metadata:
+      labels:
+        app: "consumer-service"
+    spec:
+      containers:
+      - name: "consumer-service-1"
+        image: "us.gcr.io/learn-cloud-0809/consumer_service:latest"
+        env:
+        - name: "SERVICE_NAME"
+          valueFrom:
+            configMapKeyRef:
+              key: "SERVICE_NAME"
+              name: "consumer-service-config"
+        - name: "RABBIT_MQ_URL"
+          valueFrom:
+            configMapKeyRef:
+              key: "RABBIT_MQ_URL"
+              name: "consumer-service-config"
+        - name: "EXCHANGE_NAME"
+          valueFrom:
+            configMapKeyRef:
+              key: "EXCHANGE_NAME"
+              name: "consumer-service-config"
+        - name: "REST_SERVICE_URL"
+          valueFrom:
+            configMapKeyRef:
+              key: "REST_SERVICE_URL"
+              name: "consumer-service-config"
+---
+apiVersion: "autoscaling/v2"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "consumer-service-hpa-s6un"
+  namespace: "microservices"
+  labels:
+    app: "consumer-service"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "consumer-service"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      target:
+        type: "Utilization"
+        averageUtilization: 80
