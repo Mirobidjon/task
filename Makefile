@@ -1,10 +1,10 @@
 apply-macos:
+	minikube delete -p task
 	minikube start -p task
-#	minikube addons ingress -p task
 	kubectl create namespace microservices
 	kubectl apply -f ./configs
 	kubectl apply -f ./rabbitmq
-	time bash ./sleep.sh
+	time bash ./wait_rabbitmq.sh
 	kubectl apply -f ./deployments
 	kubectl apply -f ./services/rest-service-m1-macos.yaml
 
@@ -17,7 +17,7 @@ apply-linux:
 	kubectl create namespace microservices
 	kubectl apply -f ./configs
 	kubectl apply -f ./rabbitmq
-	time bash ./sleep.sh
+	time bash ./wait_rabbitmq.sh
 	kubectl apply -f ./deployments
 	kubectl apply -f ./services/rest-service-linux.yaml
 	kubectl apply -f ./ingress/rest-service-linux.yaml
