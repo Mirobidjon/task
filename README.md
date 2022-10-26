@@ -25,7 +25,7 @@ kubectl get svc
 
 Rest service swagger
 ```bash
-http://127.0.0.1:8080/swagger/index.html
+http://127.0.0.1:80/swagger/index.html
 ```
 
 RabbitMQ management admin panel, you can use guest/guest
