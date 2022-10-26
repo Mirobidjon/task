@@ -9,7 +9,7 @@
 
 # Deployment with kubernetes
 
-### If you use minikube and macos m1 you can run this command for deploy
+### If you use minikube and macos m1 you can run this command for run
 
 ```bash
 make apply-macos
@@ -34,7 +34,7 @@ http://127.0.0.1:15672/
 ```
 
 
-### If you use minikube and linux you have to install k3d and run this command for deploy
+### If you use minikube and linux you have to install k3d and run this command for run
 
 ```bash
 make apply-linux
