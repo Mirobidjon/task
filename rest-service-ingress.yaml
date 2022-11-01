@@ -1,0 +1,79 @@
+---
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: rest-service-ingress
+    namespace: microservices
+  spec:
+    ingressClassName: nginx
+    rules:
+      - host: rest.mirobidjon.uz
+        http:
+          paths:
+            - pathType: Prefix
+              backend:
+                service:
+                  name: rest-service
+                  port:
+                    number: 80
+              path: /
+
+---
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: rabbitmq-ingress
+    namespace: microservices
+  spec:
+    ingressClassName: nginx
+    rules:
+      - host: rabbitmq.mirobidjon.uz
+        http:
+          paths:
+            - pathType: Prefix
+              backend:
+                service:
+                  name: rabbitmq-service
+                  port:
+                    number: 15672
+              path: /
+
+---
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: rabbitmq-client-ingress
+    namespace: microservices
+  spec:
+    ingressClassName: nginx
+    rules:
+      - host: rabbitmq-client.mirobidjon.uz
+        http:
+          paths:
+            - pathType: Prefix
+              backend:
+                service:
+                  name: rabbitmq-service
+                  port:
+                    number: 5672
+              path: /
+
+---
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: grafana-ingress
+    namespace: prometheus
+  spec:
+    ingressClassName: nginx
+    rules:
+      - host: mon.mirobidjon.uz
+        http:
+          paths:
+            - pathType: Prefix
+              backend:
+                service:
+                  name: prometheus-grafana
+                  port:
+                    number: 80
+              path: /
